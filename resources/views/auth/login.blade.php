@@ -48,7 +48,7 @@
             </div>
 
             <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                <a class="font-label text-sm uppercase tracking-widest text-outline transition-colors hover:text-on-surface" href="{{ route('users.create') }}">
+                <a class="font-label text-sm uppercase tracking-widest text-outline transition-colors hover:text-on-surface" href="{{ route('register') }}">
                     Não tem conta? Cadastrar
                 </a>
 

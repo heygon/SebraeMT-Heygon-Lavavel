@@ -40,6 +40,12 @@ class UserController extends Controller
             $request->file('avatar')
         );
 
+        if (auth()->check()) {
+            return redirect()
+                ->route('users.show', $user)
+                ->with('status', 'User created successfully.');
+        }
+
         return redirect()
             ->route('login')
             ->with('status', 'Cadastro realizado com sucesso. Faça login para continuar.');

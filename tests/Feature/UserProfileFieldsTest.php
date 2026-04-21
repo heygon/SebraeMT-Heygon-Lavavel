@@ -68,7 +68,7 @@ class UserProfileFieldsTest extends TestCase
             ]),
         ]);
 
-        $response = $this->post('/users', [
+        $response = $this->post('/register', [
             'name' => 'Nakia Okoye',
             'email' => 'nakia@example.com',
             'password' => 'password123',
@@ -98,6 +98,45 @@ class UserProfileFieldsTest extends TestCase
         ])->assertRedirect(route('users.index'));
 
         $this->assertAuthenticatedAs($user);
+    }
+
+    public function test_authenticated_user_can_create_user_from_panel(): void
+    {
+        Storage::fake('public');
+        $this->actingAs(User::factory()->create());
+
+        Http::fake([
+            'viacep.com.br/ws/78000000/json/' => Http::response([
+                'cep' => '78000-000',
+                'logradouro' => 'Rua dos Testes',
+                'complemento' => '',
+                'unidade' => '',
+                'bairro' => 'Centro',
+                'localidade' => 'Cuiabá',
+                'uf' => 'MT',
+                'estado' => 'Mato Grosso',
+                'regiao' => 'Centro-Oeste',
+                'ibge' => '5103403',
+                'gia' => '',
+                'ddd' => '65',
+                'siafi' => '9069',
+            ]),
+        ]);
+
+        $response = $this->post('/users', [
+            'name' => 'Okoye General',
+            'email' => 'okoye@example.com',
+            'password' => 'password123',
+            'summary' => 'Protege o arquivo principal.',
+            'authority_level' => 'warrior',
+            'avatar' => $this->fakeImageUpload('okoye.png'),
+            'cep' => '78000000',
+        ]);
+
+        $createdUser = User::query()->where('email', 'okoye@example.com')->firstOrFail();
+
+        $response->assertRedirect(route('users.show', $createdUser));
+        $this->assertAuthenticated();
     }
 
     public function test_edit_screen_prefills_summary_and_authority_level(): void

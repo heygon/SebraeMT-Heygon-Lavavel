@@ -10,8 +10,10 @@
     $identity = $isEdit
         ? 'U_ARCH_' . str_pad((string) $user->id, 4, '0', STR_PAD_LEFT)
         : 'U_ARCH_7721';
-    $cancelRoute = $isEdit ? route('users.index') : route('login');
-    $cancelLabel = $isEdit ? 'Descartar alterações' : 'Já possui conta? Entrar';
+    $isAuthenticated = auth()->check();
+    $createAction = $isAuthenticated ? route('users.store') : route('register.store');
+    $cancelRoute = $isEdit ? route('users.index') : ($isAuthenticated ? route('users.index') : route('login'));
+    $cancelLabel = $isEdit ? 'Descartar alterações' : ($isAuthenticated ? 'Voltar para a lista' : 'Já possui conta? Entrar');
     $submitLabel = $isEdit ? 'Atualizar' : 'Cadastrar';
 @endphp
 
@@ -59,7 +61,7 @@
         </div>
 
         <div class="lg:col-span-8 space-y-10">
-            <form id="user-form" class="space-y-8" method="POST" action="{{ $isEdit ? route('users.update', $user) : route('users.store') }}" enctype="multipart/form-data">
+            <form id="user-form" class="space-y-8" method="POST" action="{{ $isEdit ? route('users.update', $user) : $createAction }}" enctype="multipart/form-data">
                 @csrf
                 @if ($isEdit)
                     @method('PUT')

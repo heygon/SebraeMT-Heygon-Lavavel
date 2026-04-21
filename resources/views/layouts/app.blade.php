@@ -136,7 +136,7 @@
             <a class="rounded-full border border-cyan-500/20 px-4 py-2 text-xs font-headline uppercase tracking-[0.25em] text-zinc-300 transition-colors hover:border-secondary-container hover:text-secondary-container" href="{{ route('login') }}">
                 Entrar
             </a>
-            <a class="rounded-full bg-primary-container px-4 py-2 text-xs font-headline uppercase tracking-[0.25em] text-primary transition-colors hover:bg-primary hover:text-on-primary" href="{{ route('users.create') }}">
+            <a class="rounded-full bg-primary-container px-4 py-2 text-xs font-headline uppercase tracking-[0.25em] text-primary transition-colors hover:bg-primary hover:text-on-primary" href="{{ route('register') }}">
                 Cadastrar
             </a>
         </div>

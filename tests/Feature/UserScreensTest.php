@@ -49,7 +49,7 @@ class UserScreensTest extends TestCase
 
     public function test_create_page_renders_expected_form_fields(): void
     {
-        $this->get('/users/create')
+        $this->get('/register')
             ->assertOk()
             ->assertSee('Cadastro de Entidade')
             ->assertSee('name="name"', false)
@@ -65,6 +65,16 @@ class UserScreensTest extends TestCase
             ->assertSee('value="civic"', false)
             ->assertSee('value="warrior"', false)
             ->assertSee('value="elder"', false);
+    }
+
+    public function test_authenticated_user_can_access_internal_create_page(): void
+    {
+        $this->actingAs(User::factory()->create());
+
+        $this->get('/users/create')
+            ->assertOk()
+            ->assertSee('Cadastro de Entidade')
+            ->assertSee('action="'.route('users.store').'"', false);
     }
 
     public function test_show_page_displays_user_data_and_avatar_url(): void
