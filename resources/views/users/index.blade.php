@@ -1,27 +1,27 @@
 @extends('layouts.app')
 
-@section('title', 'Active Users')
+@section('title', 'Usuários Ativos')
 
 @section('content')
 <div class="relative px-4 pb-32 pt-8 max-w-5xl mx-auto">
     <div class="fixed inset-0 pointer-events-none bg-gradient-to-b from-primary-container/20 via-background to-surface-container-lowest z-[-1]"></div>
 
     <section class="mb-12">
-        <p class="font-label text-tertiary tracking-[0.35em] uppercase text-[10px] mb-3">Vibranium Protocol v4.0</p>
-        <h2 class="font-headline text-4xl md:text-6xl font-black tracking-tighter text-on-surface mb-4">Active Users</h2>
+        <p class="font-label text-tertiary tracking-[0.35em] uppercase text-[10px] mb-3">Protocolo Vibranium v4.0</p>
+        <h2 class="font-headline text-4xl md:text-6xl font-black tracking-tighter text-on-surface mb-4">Usuários Ativos</h2>
         <p class="max-w-2xl text-lg text-on-surface-variant leading-relaxed">
-            Accessing the ancestral biometric archive. Filtering digital signatures across the Golden City network.
+            Acessando o arquivo biométrico ancestral. Filtrando assinaturas digitais pela rede da Cidade Dourada.
         </p>
     </section>
 
     <form method="GET" action="{{ route('users.index') }}" class="mb-10">
         <label class="block">
-            <span class="sr-only">Scan identification</span>
+            <span class="sr-only">Escanear identificação</span>
             <div class="flex items-center gap-4 border-b border-outline-variant pb-3">
                 <input
                     class="w-full bg-transparent border-0 p-0 text-lg tracking-[0.25em] uppercase text-on-surface placeholder:text-outline focus:ring-0"
                     name="search"
-                    placeholder="Scan identification..."
+                    placeholder="Escanear identificação..."
                     type="search"
                     value="{{ request('search') }}"
                 />
@@ -37,7 +37,7 @@
             @include('users.partials.card', ['user' => $user])
         @empty
             <div class="rounded-2xl bg-surface-container-high/40 p-8 text-on-surface-variant shadow-2xl">
-                No users are archived yet.
+                Ainda não há usuários arquivados.
             </div>
         @endforelse
     </div>

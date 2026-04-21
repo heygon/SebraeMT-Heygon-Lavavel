@@ -16,9 +16,9 @@
             <span class="material-symbols-outlined text-secondary-fixed-dim group-hover:translate-x-[-4px] transition-transform">keyboard_double_arrow_left</span>
         </a>
         <div>
-            <p class="font-label text-secondary-fixed-dim text-[10px] tracking-widest uppercase">System Protocol</p>
+            <p class="font-label text-secondary-fixed-dim text-[10px] tracking-widest uppercase">Protocolo do Sistema</p>
             <h2 class="text-2xl font-headline font-bold text-primary tracking-tight uppercase">
-                {{ $isEdit ? 'Update Registry' : 'Entity Initialization' }}
+                {{ $isEdit ? 'Atualizar Cadastro' : 'Cadastro de Entidade' }}
             </h2>
         </div>
     </div>
@@ -42,13 +42,13 @@
             <input id="avatar-upload" form="user-form" class="hidden" name="avatar" type="file" accept="image/*"/>
             <label for="avatar-upload" class="mb-6 inline-flex cursor-pointer items-center gap-2 rounded-full bg-primary-container px-4 py-2 text-primary shadow-lg transition-transform hover:scale-105">
                 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">photo_camera</span>
-                <span class="font-label text-xs uppercase tracking-[0.2em]">Update Avatar</span>
+                <span class="font-label text-xs uppercase tracking-[0.2em]">Atualizar avatar</span>
             </label>
             @error('avatar')
                 <p class="mb-4 text-xs text-error">{{ $message }}</p>
             @enderror
             <div class="space-y-2">
-                <p class="font-label text-xs text-outline tracking-[0.2em] uppercase">Identity Link</p>
+                <p class="font-label text-xs text-outline tracking-[0.2em] uppercase">Link de Identidade</p>
                 <p class="font-headline text-lg font-bold text-on-surface">{{ $identity }}</p>
             </div>
         </div>
@@ -63,28 +63,28 @@
                 <div class="space-y-6">
                     <div class="flex items-center gap-3 border-b border-outline-variant pb-2">
                         <span class="material-symbols-outlined text-secondary-fixed-dim text-sm">fingerprint</span>
-                        <h3 class="font-headline font-bold text-sm tracking-widest uppercase text-outline">Vital Records</h3>
+                        <h3 class="font-headline font-bold text-sm tracking-widest uppercase text-outline">Registro de membro da tribo</h3>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="relative group">
-                            <label class="block font-label text-[10px] tracking-widest uppercase text-outline group-focus-within:text-secondary-fixed-dim transition-colors mb-2">Full Designation</label>
-                            <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-secondary-container focus:ring-0 text-on-surface font-body transition-all px-0 pb-2 placeholder:text-surface-variant" name="name" placeholder="Enter user name..." type="text" value="{{ old('name', $user->name ?? '') }}"/>
+                            <label class="block font-label text-[10px] tracking-widest uppercase text-outline group-focus-within:text-secondary-fixed-dim transition-colors mb-2">Nome completo</label>
+                            <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-secondary-container focus:ring-0 text-on-surface font-body transition-all px-0 pb-2 placeholder:text-surface-variant" name="name" placeholder="Digite o nome do usuário..." type="text" value="{{ old('name', $user->name ?? '') }}"/>
                             @error('name')
                                 <p class="mt-2 text-xs text-error">{{ $message }}</p>
                             @enderror
                         </div>
                         <div class="relative group">
-                            <label class="block font-label text-[10px] tracking-widest uppercase text-outline group-focus-within:text-secondary-fixed-dim transition-colors mb-2">Archival Node</label>
-                            <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-secondary-container focus:ring-0 text-on-surface font-body transition-all px-0 pb-2 placeholder:text-surface-variant" name="email" placeholder="communications@wakanda.tech" type="email" value="{{ old('email', $user->email ?? '') }}"/>
+                            <label class="block font-label text-[10px] tracking-widest uppercase text-outline group-focus-within:text-secondary-fixed-dim transition-colors mb-2">E-mail da tribo</label>
+                            <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-secondary-container focus:ring-0 text-on-surface font-body transition-all px-0 pb-2 placeholder:text-surface-variant" name="email" placeholder="comunicacoes@wakanda.tech" type="email" value="{{ old('email', $user->email ?? '') }}"/>
                             @error('email')
                                 <p class="mt-2 text-xs text-error">{{ $message }}</p>
                             @enderror
                         </div>
                         <div class="relative group md:col-span-2">
                             <label class="block font-label text-[10px] tracking-widest uppercase text-outline group-focus-within:text-secondary-fixed-dim transition-colors mb-2">
-                                {{ $isEdit ? 'Reset Password' : 'Password' }}
+                                {{ $isEdit ? 'Redefinir senha' : 'Senha' }}
                             </label>
-                            <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-secondary-container focus:ring-0 text-on-surface font-body transition-all px-0 pb-2 placeholder:text-surface-variant" name="password" placeholder="{{ $isEdit ? 'Leave blank to keep the current password' : 'Create a secure password' }}" type="password"/>
+                            <input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-secondary-container focus:ring-0 text-on-surface font-body transition-all px-0 pb-2 placeholder:text-surface-variant" name="password" placeholder="{{ $isEdit ? 'Deixe em branco para manter a senha atual' : 'Crie uma senha segura' }}" type="password"/>
                             @error('password')
                                 <p class="mt-2 text-xs text-error">{{ $message }}</p>
                             @enderror
@@ -95,17 +95,17 @@
                 <div class="space-y-6">
                     <div class="flex items-center gap-3 border-b border-outline-variant pb-2">
                         <span class="material-symbols-outlined text-secondary-fixed-dim text-sm">shield_person</span>
-                        <h3 class="font-headline font-bold text-sm tracking-widest uppercase text-outline">Clearance Matrices</h3>
+                        <h3 class="font-headline font-bold text-sm tracking-widest uppercase text-outline">Perfil de Acesso</h3>
                     </div>
                     <div class="space-y-4">
-                        <label class="block font-label text-[10px] tracking-widest uppercase text-outline mb-4">Authority Level</label>
+                        <label class="block font-label text-[10px] tracking-widest uppercase text-outline mb-4">Nível de Autoridade</label>
                         <div class="flex flex-wrap gap-3">
-                            @foreach (['Civic', 'Warrior', 'Elder'] as $level)
+                            @foreach (['civic' => 'Cívico', 'warrior' => 'Guerreiro', 'elder' => 'Ancião'] as $levelValue => $levelLabel)
                                 <label class="cursor-pointer group">
-                                    <input class="hidden peer" name="authority_level" type="radio" value="{{ strtolower($level) }}" @checked($selectedAuthorityLevel === strtolower($level))/>
+                                    <input class="hidden peer" name="authority_level" type="radio" value="{{ $levelValue }}" @checked($selectedAuthorityLevel === $levelValue)/>
                                     <div class="px-6 py-2 rounded-lg bg-surface-container-low border border-outline-variant peer-checked:border-secondary-container peer-checked:bg-secondary-container/10 transition-all flex items-center gap-2">
                                         <div class="w-2 h-2 rounded-full bg-outline group-hover:bg-secondary-fixed-dim peer-checked:bg-secondary-container shadow-[0_0_8px_rgba(34,211,238,0.5)]"></div>
-                                        <span class="font-label text-xs uppercase tracking-wider text-outline peer-checked:text-on-surface">{{ $level }}</span>
+                                        <span class="font-label text-xs uppercase tracking-wider text-outline peer-checked:text-on-surface">{{ $levelLabel }}</span>
                                     </div>
                                 </label>
                             @endforeach
@@ -116,24 +116,23 @@
                 <div class="space-y-6">
                     <div class="flex items-center gap-3 border-b border-outline-variant pb-2">
                         <span class="material-symbols-outlined text-secondary-fixed-dim text-sm">terminal</span>
-                        <h3 class="font-headline font-bold text-sm tracking-widest uppercase text-outline">Service Narrative</h3>
+                        <h3 class="font-headline font-bold text-sm tracking-widest uppercase text-outline">Descrição do membro da tribo</h3>
                     </div>
                     <div class="relative group">
-                        <label class="block font-label text-[10px] tracking-widest uppercase text-outline group-focus-within:text-secondary-fixed-dim transition-colors mb-2">Archive Summary</label>
-                        <textarea class="w-full bg-surface-container-low/40 rounded-xl border border-outline-variant focus:border-secondary-container focus:ring-0 text-on-surface font-body transition-all p-4 placeholder:text-surface-variant" name="summary" placeholder="Input archival summary..." rows="4">{{ old('summary', $user->summary ?? '') }}</textarea>
+                        <textarea class="w-full bg-surface-container-low/40 rounded-xl border border-outline-variant focus:border-secondary-container focus:ring-0 text-on-surface font-body transition-all p-4 placeholder:text-surface-variant" name="summary" placeholder="Digite um resumo do membro da tribo..." rows="4">{{ old('summary', $user->summary ?? '') }}</textarea>
                     </div>
                 </div>
 
                 <div class="pt-8 flex flex-col md:flex-row items-center justify-end gap-6">
                     <a href="{{ route('users.index') }}" class="font-label text-sm uppercase tracking-widest text-outline hover:text-on-surface transition-colors">
-                        Discard Changes
+                        Descartar alterações
                     </a>
                     <button class="relative group p-[2px] transition-transform active:scale-95" type="submit">
                         <div class="absolute inset-0 bg-primary opacity-40 blur-xl group-hover:opacity-60 transition-opacity hex-clip"></div>
                         <div class="hex-clip bg-gradient-to-br from-primary via-primary-container to-background p-[1px]">
                             <div class="hex-clip bg-primary-container px-12 py-4 flex items-center gap-3">
                                 <span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">verified_user</span>
-                                <span class="font-headline font-bold tracking-[0.2em] uppercase text-primary">{{ $isEdit ? 'Update' : 'Authorize' }}</span>
+                                <span class="font-headline font-bold tracking-[0.2em] uppercase text-primary">{{ $isEdit ? 'Atualizar' : 'Autorizar' }}</span>
                             </div>
                         </div>
                     </button>
@@ -158,21 +157,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 const reader = new FileReader();
                 
                 reader.onload = function(event) {
-                    // Remove placeholder if exists
+                        // Remove o placeholder se existir
                     if (avatarPlaceholder) {
                         avatarPlaceholder.remove();
                     }
 
-                    // If avatar image already exists, update it
+                    // Se a imagem do avatar já existir, atualize-a
                     if (avatarDisplay) {
                         avatarDisplay.src = event.target.result;
                     } else {
-                        // Create new image element
+                        // Cria um novo elemento de imagem
                         const newImg = document.createElement('div');
                         newImg.className = 'w-full h-full hex-clip overflow-hidden';
-                        newImg.innerHTML = `<img id="avatar-display" class="w-full h-full object-cover" src="${event.target.result}" alt="Avatar Preview">`;
+                        newImg.innerHTML = `<img id="avatar-display" class="w-full h-full object-cover" src="${event.target.result}" alt="Prévia do avatar">`;
                         
-                        // Clear container and add new image
+                        // Limpa o contêiner e adiciona a nova imagem
                         avatarContainer.innerHTML = '';
                         avatarContainer.appendChild(newImg);
                     }
@@ -182,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Optional: trigger file input via label
+        // Opcional: aciona o campo de arquivo pela label
         const label = document.querySelector('label[for="avatar-upload"]');
         if (label) {
             label.addEventListener('click', function(e) {

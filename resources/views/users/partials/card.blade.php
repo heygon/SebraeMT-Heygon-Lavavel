@@ -25,12 +25,12 @@
 
             <div class="space-y-1">
                 <p class="font-headline text-[10px] tracking-[0.35em] uppercase text-tertiary">
-                    {{ $user->email_verified_at ? 'Elite User' : 'Pending Access' }}
+                    {{ $user->email_verified_at ? 'Usuário Elite' : 'Acesso Pendente' }}
                 </p>
                 <h3 class="font-headline text-2xl font-black tracking-tight text-on-surface">{{ $user->name }}</h3>
                 <p class="text-sm text-on-surface-variant">{{ $user->email }}</p>
                 <p class="text-xs uppercase tracking-[0.25em] text-outline">
-                    {{ $user->authority_level ? str_replace('_', ' ', $user->authority_level) : 'Authority unset' }}
+                    {{ $user->authority_level ? ['civic' => 'Cívico', 'warrior' => 'Guerreiro', 'elder' => 'Ancião'][$user->authority_level] ?? str_replace('_', ' ', $user->authority_level) : 'Autoridade não definida' }}
                 </p>
                 @if ($user->summary)
                     <p class="max-w-xl text-sm text-on-surface-variant">{{ $user->summary }}</p>
@@ -38,7 +38,7 @@
                 <div class="flex items-center gap-3 pt-1">
                     <span class="h-2.5 w-2.5 rounded-full {{ $user->email_verified_at ? 'bg-secondary-container' : 'bg-outline' }}"></span>
                     <span class="text-[10px] uppercase tracking-[0.25em] text-outline">
-                        Sync: {{ $sync }}%
+                        Sincronização: {{ $sync }}%
                     </span>
                 </div>
             </div>
@@ -50,12 +50,12 @@
                     <div class="h-full rounded-full bg-secondary-container" style="width: {{ $sync }}%"></div>
                 </div>
                 <p class="mt-2 text-[10px] uppercase tracking-[0.3em] text-outline">
-                    Created {{ optional($user->created_at)->format('d.m.Y') ?? '—' }}
+                    Criado em {{ optional($user->created_at)->format('d.m.Y') ?? '—' }}
                 </p>
             </div>
 
             <a href="{{ route('users.show', $user) }}" class="font-headline text-sm font-bold uppercase tracking-[0.35em] text-tertiary transition-colors hover:text-secondary-container">
-                Archive <span class="ml-2">›</span>
+                Ver registro <span class="ml-2">›</span>
             </a>
         </div>
     </div>
