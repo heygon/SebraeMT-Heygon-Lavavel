@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -21,6 +22,21 @@ class AvatarUploadTest extends TestCase
     public function test_avatar_uploaded_on_user_creation(): void
     {
         Storage::fake('public');
+        Http::fake([
+            'buscacepinter.correios.com.br/app/consulta/html/consulta-detalhes-cep.php' => Http::response([
+                'erro' => false,
+                'dados' => [
+                    [
+                        'logradouroDNEC' => 'Rua dos Testes',
+                        'bairro' => 'Centro',
+                        'localidade' => 'Cuiabá',
+                        'localidadeSubordinada' => '',
+                        'uf' => 'MT',
+                        'cep' => '78000000',
+                    ],
+                ],
+            ]),
+        ]);
 
         $tmpFile = tmpfile();
         $tmpPath = stream_get_meta_data($tmpFile)['uri'];
@@ -37,6 +53,7 @@ class AvatarUploadTest extends TestCase
             'authority_level' => 'civic',
             'summary' => 'Test',
             'avatar' => $image,
+            'cep' => '78000000',
         ]);
 
         $response->assertRedirect();
@@ -64,9 +81,15 @@ class AvatarUploadTest extends TestCase
     public function test_avatar_replaced_on_user_update(): void
     {
         Storage::fake('public');
+        $this->actingAs(User::factory()->create());
 
         $user = User::factory()->create([
             'avatar_path' => 'avatars/old.jpg',
+            'rua' => 'Rua Antiga',
+            'bairro' => 'Centro',
+            'cidade' => 'Cuiabá',
+            'estado' => 'MT',
+            'cep' => '78000000',
         ]);
 
         Storage::disk('public')->put('avatars/old.jpg', 'old content');
@@ -84,6 +107,11 @@ class AvatarUploadTest extends TestCase
             'authority_level' => 'warrior',
             'summary' => 'Updated',
             'avatar' => $image,
+            'cep' => '78000000',
+            'rua' => 'Rua Antiga',
+            'bairro' => 'Centro',
+            'cidade' => 'Cuiabá',
+            'estado' => 'MT',
         ]);
 
         $response->assertRedirect();
@@ -96,10 +124,17 @@ class AvatarUploadTest extends TestCase
 
     public function test_edit_form_displays_avatar_url(): void
     {
+        $this->actingAs(User::factory()->create());
+
         $user = User::factory()->create([
             'avatar_path' => 'avatars/test.jpg',
             'summary' => 'Test Summary',
             'authority_level' => 'elder',
+            'rua' => 'Rua Teste',
+            'bairro' => 'Centro',
+            'cidade' => 'Cuiabá',
+            'estado' => 'MT',
+            'cep' => '78000000',
         ]);
 
         $response = $this->get("/users/{$user->id}/edit");

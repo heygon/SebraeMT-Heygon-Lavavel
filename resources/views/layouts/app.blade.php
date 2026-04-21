@@ -100,6 +100,7 @@
     @stack('head')
 </head>
 <body class="bg-surface text-on-surface font-body selection:bg-secondary-container selection:text-on-secondary-container min-h-screen overflow-x-hidden energy-grid">
+@auth
 <header class="bg-zinc-950/80 backdrop-blur-2xl text-violet-300 dark:text-violet-200 sticky top-0 z-50 border-b border-cyan-500/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
     <div class="flex items-center justify-between px-6 py-4 w-full max-w-none">
         <div class="flex items-center gap-4">
@@ -115,12 +116,33 @@
                 <a class="{{ request()->routeIs('users.create') ? 'text-cyan-400' : 'text-zinc-500 hover:text-cyan-300' }} transition-all" href="{{ route('users.create') }}">CADASTRAR</a>
                 <a class="{{ request()->routeIs('users.show') || request()->routeIs('users.edit') ? 'text-cyan-400' : 'text-zinc-500 hover:text-cyan-300' }} transition-all" href="{{ route('users.index') }}">PERFIL</a>
             </nav>
-            <div class="w-10 h-10 rounded-full border-2 border-primary-container overflow-hidden flex items-center justify-center bg-surface-container-highest">
-                <span class="font-headline text-xs tracking-[0.2em] text-primary">UA</span>
-            </div>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button class="rounded-full border border-cyan-500/20 bg-surface-container-highest px-4 py-2 text-xs font-headline uppercase tracking-[0.25em] text-secondary-container transition-colors hover:border-secondary-container hover:text-secondary-fixed" type="submit">
+                    Sair
+                </button>
+            </form>
         </div>
     </div>
 </header>
+@else
+<header class="bg-zinc-950/80 backdrop-blur-2xl text-violet-300 dark:text-violet-200 sticky top-0 z-50 border-b border-cyan-500/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+    <div class="flex items-center justify-between px-6 py-4 w-full max-w-none">
+        <div class="flex items-center gap-4">
+            <h1 class="font-headline tracking-[0.2em] font-black text-xl text-violet-300 dark:text-cyan-400">ARQUIVO DE USUÁRIOS</h1>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <a class="rounded-full border border-cyan-500/20 px-4 py-2 text-xs font-headline uppercase tracking-[0.25em] text-zinc-300 transition-colors hover:border-secondary-container hover:text-secondary-container" href="{{ route('login') }}">
+                Entrar
+            </a>
+            <a class="rounded-full bg-primary-container px-4 py-2 text-xs font-headline uppercase tracking-[0.25em] text-primary transition-colors hover:bg-primary hover:text-on-primary" href="{{ route('users.create') }}">
+                Cadastrar
+            </a>
+        </div>
+    </div>
+</header>
+@endauth
 
 @if (session('status'))
     <div class="mx-auto max-w-6xl px-6 pt-6">
@@ -134,6 +156,7 @@
     @yield('content')
 </main>
 
+@auth
 <nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-8 pt-4 bg-[#131313]/90 backdrop-blur-3xl border-t border-violet-500/20 shadow-[0_-15px_40px_rgba(45,27,77,0.4)] z-50">
     <a class="flex flex-col items-center justify-center {{ request()->routeIs('users.index') ? 'bg-violet-900/30 text-cyan-300 rounded-2xl px-5 py-2 ring-1 ring-cyan-500/30 shadow-[0_0_20px_rgba(34,211,238,0.2)]' : 'text-zinc-500 hover:text-zinc-200' }} transition-all duration-200" href="{{ route('users.index') }}">
         <span class="material-symbols-outlined">groups</span>
@@ -148,5 +171,6 @@
         <span class="font-headline text-[10px] tracking-[0.1em] font-medium uppercase mt-1">PERFIL</span>
     </a>
 </nav>
+@endauth
 </body>
 </html>

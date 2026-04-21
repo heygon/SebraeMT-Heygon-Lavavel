@@ -2,17 +2,22 @@
     $isEdit = isset($user) && $user->exists;
     $avatarUrl = $isEdit ? $user->avatar_url : null;
     $selectedAuthorityLevel = old('authority_level', $isEdit ? ($user->authority_level ?? 'warrior') : 'warrior');
+    $cepValue = preg_replace('/\D+/', '', old('cep', $user->cep ?? ''));
+    $formattedCep = $cepValue ? preg_replace('/(\d{5})(\d{3})/', '$1-$2', $cepValue) : '';
     $initials = $isEdit
         ? collect(explode(' ', $user->name))->filter()->map(fn ($part) => mb_strtoupper(mb_substr($part, 0, 1)))->take(2)->implode('')
         : 'UA';
     $identity = $isEdit
         ? 'U_ARCH_' . str_pad((string) $user->id, 4, '0', STR_PAD_LEFT)
         : 'U_ARCH_7721';
+    $cancelRoute = $isEdit ? route('users.index') : route('login');
+    $cancelLabel = $isEdit ? 'Descartar alterações' : 'Já possui conta? Entrar';
+    $submitLabel = $isEdit ? 'Atualizar' : 'Cadastrar';
 @endphp
 
 <div class="relative px-4 pb-32 pt-8 max-w-4xl mx-auto">
     <div class="mb-12 flex items-center gap-4">
-        <a href="{{ route('users.index') }}" class="flex items-center justify-center p-3 rounded-xl bg-surface-container-high border border-outline-variant hover:border-secondary-container transition-all group active:scale-95">
+        <a href="{{ $cancelRoute }}" class="flex items-center justify-center p-3 rounded-xl bg-surface-container-high border border-outline-variant hover:border-secondary-container transition-all group active:scale-95">
             <span class="material-symbols-outlined text-secondary-fixed-dim group-hover:translate-x-[-4px] transition-transform">keyboard_double_arrow_left</span>
         </a>
         <div>
@@ -115,6 +120,90 @@
 
                 <div class="space-y-6">
                     <div class="flex items-center gap-3 border-b border-outline-variant pb-2">
+                        <span class="material-symbols-outlined text-secondary-fixed-dim text-sm">location_on</span>
+                        <h3 class="font-headline font-bold text-sm tracking-widest uppercase text-outline">Endereço</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="relative group md:col-span-2">
+                            <label class="block font-label text-[10px] tracking-widest uppercase text-outline group-focus-within:text-secondary-fixed-dim transition-colors mb-2">CEP</label>
+                            <input
+                                class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-secondary-container focus:ring-0 text-on-surface font-body transition-all px-0 pb-2 placeholder:text-surface-variant"
+                                id="cep-input"
+                                name="cep"
+                                placeholder="00000-000"
+                                type="text"
+                                inputmode="numeric"
+                                maxlength="9"
+                                value="{{ $formattedCep }}"
+                            />
+                            @error('cep')
+                                <p class="mt-2 text-xs text-error">{{ $message }}</p>
+                            @enderror
+                            <p class="mt-2 text-xs text-outline" id="cep-feedback"></p>
+                        </div>
+                        <div class="relative group md:col-span-2">
+                            <label class="block font-label text-[10px] tracking-widest uppercase text-outline group-focus-within:text-secondary-fixed-dim transition-colors mb-2">Rua</label>
+                            <input
+                                class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-secondary-container focus:ring-0 text-on-surface font-body transition-all px-0 pb-2 placeholder:text-surface-variant"
+                                id="rua-input"
+                                name="rua"
+                                placeholder="Rua, avenida ou travessa"
+                                type="text"
+                                value="{{ old('rua', $user->rua ?? '') }}"
+                            />
+                            @error('rua')
+                                <p class="mt-2 text-xs text-error">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div class="relative group">
+                            <label class="block font-label text-[10px] tracking-widest uppercase text-outline group-focus-within:text-secondary-fixed-dim transition-colors mb-2">Bairro</label>
+                            <input
+                                class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-secondary-container focus:ring-0 text-on-surface font-body transition-all px-0 pb-2 placeholder:text-surface-variant"
+                                id="bairro-input"
+                                name="bairro"
+                                placeholder="Bairro"
+                                type="text"
+                                value="{{ old('bairro', $user->bairro ?? '') }}"
+                            />
+                            @error('bairro')
+                                <p class="mt-2 text-xs text-error">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div class="relative group">
+                            <label class="block font-label text-[10px] tracking-widest uppercase text-outline group-focus-within:text-secondary-fixed-dim transition-colors mb-2">Cidade</label>
+                            <input
+                                class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-secondary-container focus:ring-0 text-on-surface font-body transition-all px-0 pb-2 placeholder:text-surface-variant"
+                                id="cidade-input"
+                                name="cidade"
+                                placeholder="Cidade"
+                                type="text"
+                                value="{{ old('cidade', $user->cidade ?? '') }}"
+                            />
+                            @error('cidade')
+                                <p class="mt-2 text-xs text-error">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div class="relative group">
+                            <label class="block font-label text-[10px] tracking-widest uppercase text-outline mb-2">Estado</label>
+                            <select
+                                class="w-full bg-surface-container-low/40 rounded-xl border border-outline-variant focus:border-secondary-container focus:ring-0 text-on-surface font-body transition-all px-4 py-3"
+                                id="estado-input"
+                                name="estado"
+                            >
+                                <option value="">Selecione</option>
+                                @foreach (['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'] as $uf)
+                                    <option value="{{ $uf }}" @selected(old('estado', $user->estado ?? '') === $uf)>{{ $uf }}</option>
+                                @endforeach
+                            </select>
+                            @error('estado')
+                                <p class="mt-2 text-xs text-error">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="flex items-center gap-3 border-b border-outline-variant pb-2">
                         <span class="material-symbols-outlined text-secondary-fixed-dim text-sm">terminal</span>
                         <h3 class="font-headline font-bold text-sm tracking-widest uppercase text-outline">Descrição do membro da tribo</h3>
                     </div>
@@ -124,15 +213,15 @@
                 </div>
 
                 <div class="pt-8 flex flex-col md:flex-row items-center justify-end gap-6">
-                    <a href="{{ route('users.index') }}" class="font-label text-sm uppercase tracking-widest text-outline hover:text-on-surface transition-colors">
-                        Descartar alterações
+                    <a href="{{ $cancelRoute }}" class="font-label text-sm uppercase tracking-widest text-outline hover:text-on-surface transition-colors">
+                        {{ $cancelLabel }}
                     </a>
                     <button class="relative group p-[2px] transition-transform active:scale-95" type="submit">
                         <div class="absolute inset-0 bg-primary opacity-40 blur-xl group-hover:opacity-60 transition-opacity hex-clip"></div>
                         <div class="hex-clip bg-gradient-to-br from-primary via-primary-container to-background p-[1px]">
                             <div class="hex-clip bg-primary-container px-12 py-4 flex items-center gap-3">
                                 <span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1;">verified_user</span>
-                                <span class="font-headline font-bold tracking-[0.2em] uppercase text-primary">{{ $isEdit ? 'Atualizar' : 'Autorizar' }}</span>
+                                <span class="font-headline font-bold tracking-[0.2em] uppercase text-primary">{{ $submitLabel }}</span>
                             </div>
                         </div>
                     </button>
@@ -188,6 +277,93 @@ document.addEventListener('DOMContentLoaded', function() {
                 e.preventDefault();
                 avatarInput.click();
             });
+        }
+
+        const cepInput = document.getElementById('cep-input');
+        const ruaInput = document.getElementById('rua-input');
+        const bairroInput = document.getElementById('bairro-input');
+        const cidadeInput = document.getElementById('cidade-input');
+        const estadoInput = document.getElementById('estado-input');
+        const cepFeedback = document.getElementById('cep-feedback');
+        let lastLookupCep = null;
+
+        const formatCep = (value) => value.replace(/\D+/g, '').slice(0, 8).replace(/^(\d{5})(\d{0,3}).*$/, '$1-$2').replace(/-$/, '');
+
+        const fillMissingField = (input, value) => {
+            if (input && !input.value.trim() && value) {
+                input.value = value;
+            }
+        };
+
+        const lookupCep = async () => {
+            if (!cepInput) {
+                return;
+            }
+
+            const cep = cepInput.value.replace(/\D+/g, '');
+
+            if (cep.length !== 8 || cep === lastLookupCep) {
+                return;
+            }
+
+            if (cepFeedback) {
+                cepFeedback.textContent = 'Consultando CEP...';
+            }
+
+            try {
+                const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`, {
+                    headers: {
+                        'Accept': 'application/json',
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Não foi possível consultar o CEP informado.');
+                }
+
+                const payload = await response.json();
+
+                if (!payload || payload.erro) {
+                    throw new Error(payload?.mensagem ?? 'CEP não encontrado.');
+                }
+
+                fillMissingField(ruaInput, payload.logradouro ?? '');
+                fillMissingField(bairroInput, payload.bairro ?? '');
+                fillMissingField(cidadeInput, payload.localidade ?? '');
+                fillMissingField(estadoInput, payload.uf ?? '');
+
+                lastLookupCep = cep;
+
+                if (cepFeedback) {
+                    cepFeedback.textContent = 'Endereço preenchido automaticamente.';
+                }
+            } catch (error) {
+                if (cepFeedback) {
+                    cepFeedback.textContent = error instanceof Error ? error.message : 'Não foi possível consultar o CEP informado.';
+                }
+            }
+        };
+
+        if (cepInput) {
+            cepInput.addEventListener('input', function() {
+                this.value = formatCep(this.value);
+
+                if (this.value.replace(/\D+/g, '').length !== 8) {
+                    lastLookupCep = null;
+                    if (cepFeedback) {
+                        cepFeedback.textContent = '';
+                    }
+                    return;
+                }
+
+                lookupCep();
+            });
+
+            cepInput.addEventListener('blur', lookupCep);
+
+            if (cepInput.value.replace(/\D+/g, '').length === 8) {
+                lookupCep();
+            }
         }
     }
 });

@@ -41,8 +41,8 @@ class UserController extends Controller
         );
 
         return redirect()
-            ->route('users.show', $user)
-            ->with('status', 'User created successfully.');
+            ->route('login')
+            ->with('status', 'Cadastro realizado com sucesso. Faça login para continuar.');
     }
 
     public function show(User $user): View

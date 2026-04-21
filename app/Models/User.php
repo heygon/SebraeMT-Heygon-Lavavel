@@ -21,6 +21,11 @@ class User extends Authenticatable
         'avatar_path',
         'summary',
         'authority_level',
+        'rua',
+        'bairro',
+        'cidade',
+        'estado',
+        'cep',
     ];
 
     protected $hidden = [

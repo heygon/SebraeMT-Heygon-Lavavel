@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
@@ -48,6 +49,23 @@ class UserServiceTest extends TestCase
     public function test_create_persists_the_user_and_uploads_avatar(): void
     {
         Storage::fake('public');
+        Http::fake([
+            'viacep.com.br/ws/78000000/json/' => Http::response([
+                'cep' => '78000-000',
+                'logradouro' => 'Rua dos Testes',
+                'complemento' => '',
+                'unidade' => '',
+                'bairro' => 'Centro',
+                'localidade' => 'Cuiabá',
+                'uf' => 'MT',
+                'estado' => 'Mato Grosso',
+                'regiao' => 'Centro-Oeste',
+                'ibge' => '5103403',
+                'gia' => '',
+                'ddd' => '65',
+                'siafi' => '9069',
+            ]),
+        ]);
 
         $user = app(UserService::class)->create(
             new UserData(
@@ -56,6 +74,7 @@ class UserServiceTest extends TestCase
                 password: 'Secret123!',
                 summary: 'Chief intelligence liaison for the archive.',
                 authorityLevel: 'elder',
+                cep: '78000000',
             ),
             $this->fakeImageUpload()
         );
@@ -66,6 +85,11 @@ class UserServiceTest extends TestCase
             'email' => 'nakia@example.com',
             'summary' => 'Chief intelligence liaison for the archive.',
             'authority_level' => 'elder',
+            'rua' => 'Rua dos Testes',
+            'bairro' => 'Centro',
+            'cidade' => 'Cuiabá',
+            'estado' => 'MT',
+            'cep' => '78000000',
         ]);
         $this->assertTrue(Hash::check('Secret123!', $user->password));
         $this->assertNotNull($user->avatar_path);
@@ -81,6 +105,11 @@ class UserServiceTest extends TestCase
             'avatar_path' => 'avatars/old-avatar.png',
             'summary' => 'Original summary',
             'authority_level' => 'civic',
+            'rua' => 'Rua Original',
+            'bairro' => 'Centro',
+            'cidade' => 'Cuiabá',
+            'estado' => 'MT',
+            'cep' => '78000000',
         ]);
 
         Storage::disk('public')->put('avatars/old-avatar.png', 'old-avatar');
@@ -93,6 +122,11 @@ class UserServiceTest extends TestCase
                 password: null,
                 summary: 'Updated summary',
                 authorityLevel: 'warrior',
+                rua: 'Rua Atualizada',
+                bairro: 'Alvorada',
+                cidade: 'Várzea Grande',
+                estado: 'MT',
+                cep: '78010000',
             ),
             $this->fakeImageUpload('new-avatar.png')
         );
@@ -101,6 +135,11 @@ class UserServiceTest extends TestCase
         $this->assertSame('warrior', $updated->authority_level);
         $this->assertTrue(Hash::check('Secret123!', $updated->password));
         $this->assertNotSame('avatars/old-avatar.png', $updated->avatar_path);
+        $this->assertSame('Rua Atualizada', $updated->rua);
+        $this->assertSame('Alvorada', $updated->bairro);
+        $this->assertSame('Várzea Grande', $updated->cidade);
+        $this->assertSame('MT', $updated->estado);
+        $this->assertSame('78010000', $updated->cep);
         Storage::disk('public')->assertMissing('avatars/old-avatar.png');
         Storage::disk('public')->assertExists($updated->avatar_path);
     }

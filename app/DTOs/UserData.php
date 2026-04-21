@@ -10,6 +10,11 @@ readonly class UserData
         public ?string $password = null,
         public ?string $summary = null,
         public ?string $authorityLevel = null,
+        public ?string $rua = null,
+        public ?string $bairro = null,
+        public ?string $cidade = null,
+        public ?string $estado = null,
+        public ?string $cep = null,
     ) {
     }
 
@@ -21,6 +26,11 @@ readonly class UserData
             password: $validated['password'] ?? null,
             summary: $validated['summary'] ?? null,
             authorityLevel: $validated['authority_level'] ?? null,
+            rua: $validated['rua'] ?? null,
+            bairro: $validated['bairro'] ?? null,
+            cidade: $validated['cidade'] ?? null,
+            estado: $validated['estado'] ?? null,
+            cep: $validated['cep'] ?? null,
         );
     }
 }

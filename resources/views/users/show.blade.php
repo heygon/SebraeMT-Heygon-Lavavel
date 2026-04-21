@@ -82,6 +82,17 @@
                     <p class="text-zinc-500 text-[10px] font-headline uppercase tracking-widest mb-1">Resumo do arquivo</p>
                     <p class="text-sm leading-relaxed text-on-surface-variant">{{ $user->summary ?? 'Nenhum resumo informado.' }}</p>
                 </div>
+                <div class="md:col-span-2">
+                    <p class="text-zinc-500 text-[10px] font-headline uppercase tracking-widest mb-1">Endereço</p>
+                    <p class="text-sm leading-relaxed text-on-surface-variant">
+                        {{ collect([$user->rua, $user->bairro, $user->cidade, $user->estado])->filter()->implode(', ') ?: 'Nenhum endereço informado.' }}
+                        @if ($user->cep)
+                            <span class="block mt-1 font-headline text-xs tracking-[0.25em] uppercase text-secondary-fixed-dim">
+                                CEP {{ preg_replace('/(\d{5})(\d{3})/', '$1-$2', $user->cep) }}
+                            </span>
+                        @endif
+                    </p>
+                </div>
             </div>
         </div>
 

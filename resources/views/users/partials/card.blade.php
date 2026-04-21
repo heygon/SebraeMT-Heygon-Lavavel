@@ -35,6 +35,14 @@
                 @if ($user->summary)
                     <p class="max-w-xl text-sm text-on-surface-variant">{{ $user->summary }}</p>
                 @endif
+                @if ($user->rua || $user->bairro || $user->cidade || $user->estado || $user->cep)
+                    <p class="max-w-xl text-xs uppercase tracking-[0.18em] text-outline">
+                        {{ collect([$user->rua, $user->bairro, $user->cidade, $user->estado])->filter()->implode(' • ') }}
+                        @if ($user->cep)
+                            — {{ preg_replace('/(\d{5})(\d{3})/', '$1-$2', $user->cep) }}
+                        @endif
+                    </p>
+                @endif
                 <div class="flex items-center gap-3 pt-1">
                     <span class="h-2.5 w-2.5 rounded-full {{ $user->email_verified_at ? 'bg-secondary-container' : 'bg-outline' }}"></span>
                     <span class="text-[10px] uppercase tracking-[0.25em] text-outline">
